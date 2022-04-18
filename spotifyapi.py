@@ -7,7 +7,6 @@ from spotipy.oauth2 import SpotifyOAuth
 # READ CONFIG FILE
 config = configparser.ConfigParser(allow_no_value=True)
 config.read("config.cfg")
-learn_card_uid = config["UIDS"]["learn_card_uid"]
 default_volume = int(config["DEVICE"]["default_volume"])
 
 playstate = False
@@ -39,9 +38,27 @@ def curr_playback():
   else:
     return -1
     
+# start playback
 def start_playing(uri):
   try:
     sp.start_playback(context_uri=uri)
+    sp.shuffle(True)
+    sp.next_track() # force random song on start
   except:
     print('error playing song')
     return -1
+
+def playpause():
+  sp.shuffle(True)
+  playback = sp.current_playback()
+  if playback["is_playing"] == False:
+    print("Resuming...")
+    sp.start_playback()
+  else:
+    print("Pausing...")
+    sp.pause_playback()
+    
+def skip_track():
+  sp.shuffle(True)
+  print("Skipping...")
+  sp.next_track()

@@ -1,16 +1,22 @@
 import time
-from spotifyapi import learn_card_uid
+import configparser
 from cardlist import CardList
 import RPi.GPIO as GPIO
 from pn532 import *
 
 cards = CardList()
 
+# READ CONFIG FILE
+config = configparser.ConfigParser(allow_no_value=True)
+config.read("config.cfg")
+learn_card_uid = config["UIDS"]["learn_card_uid"]
+pause_card_uid = config["UIDS"]["pause_card_uid"]
+skip_card_uid = config["UIDS"]["skip_card_uid"]
+
 def check_uid():
   try:
-    pn532 = PN532_UART(debug=False, reset=20)
-
     # Configure PN532 to communicate with MiFare cards
+    pn532 = PN532_UART(debug=False, reset=20)
     pn532.SAM_configuration()
 
     while True:
@@ -25,6 +31,17 @@ def check_uid():
     print(e)
   finally:
     GPIO.cleanup()
+  
+def detect_card():
+  uid, str_uid = check_uid()
+  if(str_uid == learn_card_uid):
+    return 1
+  elif(str_uid == pause_card_uid):
+    return 2
+  elif(str_uid == skip_card_uid):
+    return 3
+  else:
+    return -1
     
 def detect_learn_card():
   uid, str_uid = check_uid()
@@ -33,6 +50,24 @@ def detect_learn_card():
     return True
   else:
     print("not learn card. uid: ", str_uid)
+    return False
+
+def detect_pause_card():
+  uid, str_uid = check_uid()
+  if(str_uid == pause_card_uid):
+    print("pause card detected with uid: ", str_uid)
+    return True
+  else:
+    print("not pause card. uid: ", str_uid)
+    return False
+
+def detect_skip_card():
+  uid, str_uid = check_uid()
+  if(str_uid == skip_card_uid):
+    print("skip card detected with uid: ", str_uid)
+    return True
+  else:
+    print("not skip card. uid: ", str_uid)
     return False
     
 def write_uri(uri):

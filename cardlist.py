@@ -7,6 +7,7 @@ class CardList:
     self.path = os.path.dirname(os.path.realpath(__file__))
     self.cardList = self.readList()
     
+  # read cardlist.csv
   def readList(self):
     with open(self.path + '/cardList.csv', mode='r') as infile:
       reader = csv.reader(infile)
@@ -14,6 +15,7 @@ class CardList:
       infile.close()
     return cardList
   
+  # return playlist uri of card if it exists
   def getPlaylist(self,card):
     self.cardList = self.readList()
     try:
@@ -22,6 +24,7 @@ class CardList:
       print('Card %s is not card list' % card)
       return ''
   
+  # add card uid and playlist uri to cardlist.csv
   def addPlaylist(self, card, plist):
   	try:
   		if card not in self.cardList.keys():
