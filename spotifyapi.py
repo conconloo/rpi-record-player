@@ -37,7 +37,7 @@ def curr_playback():
       return -1
   else:
     return -1
-    
+
 # start playback
 def start_playing(uri):
   try:
@@ -48,6 +48,7 @@ def start_playing(uri):
     print('error playing song')
     return -1
 
+# play/pause
 def playpause():
   sp.shuffle(True)
   playback = sp.current_playback()
@@ -58,6 +59,7 @@ def playpause():
     print("Pausing...")
     sp.pause_playback()
     
+# skip current track
 def skip_track():
   sp.shuffle(True)
   print("Skipping...")

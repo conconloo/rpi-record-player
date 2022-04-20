@@ -4,27 +4,43 @@ import spotifyapi as spotify
 import rfidcommunication as rfid
 
 def main():
+  print("Welcome to the Raspberry Pi Spotify Record Player!")
+  print("To start, please make sure the following are true:")
+  print("(1) You are using a Spotify Premium account")
+  print("(2) The Raspberry Pi is connected to the same WiFi network as an existing Spotify device")
+  print("(3) The Raspberry Pi has been selected as the playback device for your Spotify Connect")
+  print("Scan cards to begin. Happy listening!")
+  print("")
   while True:
     command = rfid.detect_card()
     if(command == 1):
+      print("Learn card detected - writing process initiated.")
       if(write_card()==-1):
-        print('error writing new card. please try again')
+        print("There was an error writing this card. Please try again.")
+        print("")
+      else:
+        continue
+      sleep(1)
     elif(command == 2):
       try:
         spotify.playpause()
         sleep(1)
       except:
-        print("could not play/pause")
+        print("There was an error playing/pausing. Please try again.")
+        print("")
     elif(command == 3):
       try:
         spotify.skip_track()
         sleep(1)
+        print_playback()
       except:
-        print("could not skip")
+        print("There was an error skipping this track. Please try again.")
+        print("")
     else:
       uri = rfid.read_uri()
       if uri == -1:
         print("Make sure you already added this Card.")
+        print("")
         sleep(1)
         continue
       else:
@@ -34,37 +50,41 @@ def main():
             print("This can happen if you use a Phone or PC that is not always online.")
             sleep(1)
             continue
-    
-        print("Playing now!")
+        
         sleep(1)
-    
-def write_card():
+        print_playback()
+        sleep(1)
+        
+def print_playback():
   try:
-    current = spotify.curr_playback()
+    curr_track = spotify.curr_playback()
   except TypeError:
     print(">Please play a track out of the playlist you want to learn.")
     print(">Can't be \"Liked Songs\" or Podcast-Shows.")
     print(">Aborting Learning.")
     return -1
+  print("Playing a playlist containing: {} by {}.".format(curr_track[1], curr_track[2]))
   print("")
-  print("Playing a playlist containing: {}, by {}.".format(current[1], current[2]))
-  uri = current[0]
+  return curr_track
+    
+def write_card():
+  curr_track = print_playback()
+  uri = curr_track[0]
   
-  sleep(2)
+  sleep(2) # prevent double-reading of previous card
   print("Please scan the card you would like to write to.")
   str_uid = rfid.check_uid()[1]
-  if(rfid.detect_learn_card()):
-    print("cannot write to learn card. aborting.")
-    return -1
-  elif(rfid.detect_pause_card()):
-    print("cannot write to pause card. aborting.")
-    return -1
-  else:
-    print('detected card with uid: ', str_uid)
+  check_card = rfid.detect_card()
+  if(check_card == -1):
     if(rfid.write_uri(uri) == -1):
       return -1
-  
-  print('card with uid: ', str_uid, ' learned uri: ', uri, ' successfully!')
+    else:
+      print('Card with uid: ', str_uid, ' learned uri: ', uri, ' successfully!')
+      print("")
+      return 1
+  else:
+    print("Cannot write to preset card. Aborting.")
+    return -1
   
 if __name__ == "__main__":
   while True:
