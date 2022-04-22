@@ -63,4 +63,5 @@ def playpause():
 def skip_track():
   sp.shuffle(True)
   print("Skipping...")
+  print("Now Playing:")
   sp.next_track()
