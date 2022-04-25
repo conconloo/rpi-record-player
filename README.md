@@ -35,7 +35,7 @@ python3 main.py
 ## Credits
 RFID & NFC technology was configured and implemented with the following tutorial: https://www.raspberrypi.com/news/read-rfid-and-nfc-tokens-with-raspberry-pi-hackspace-37/
 
-Spotify Authentication as well as helpful code for config.cfg, rfidcommunication.py, spotifyapi.py, and main.py were taken from this article: https://www.instructables.com/RFID-Spotify-Jukebox/
+Spotify Authentication as well as helpful code for config.cfg, rfidcommunication.py, spotifyapi.py, and main.py was completed from this article: https://www.instructables.com/RFID-Spotify-Jukebox/
 
 Mapping of card UIDs and Spotify URIs was done with help from this article: https://fsahli.wordpress.com/2015/11/02/music-cards-rfid-cards-spotify-raspberry-pi/
 
