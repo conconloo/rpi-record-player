@@ -9,10 +9,11 @@ Connie Liu, Katelyn Yim, and Roshin Lal
 This is a github repo for a Raspberry Pi Record Player. This Record Player uses RFID and NFC tokens to control playback of Spotify tracks/playlists.
 
 ## Required Materials
-* Raspberry Pi with Raspbian 11 OS (Bullseye)
+* Raspberry Pi with Raspbian 11 OS (Bullseye) and power supply
 * Waveshare PN532 NFC HAT
 * NFC Cards
-* Speaker with AUX jack capability
+* Speaker with AUX jack capability (or whatever you want to listen to music with)
+* Stereo AUX splitter
 
 ## Dependencies
 This project runs on Raspotify, a Spotify Connect client. Download and install here: https://github.com/dtcooper/raspotify
